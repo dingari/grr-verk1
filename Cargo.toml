@@ -1,0 +1,8 @@
+[package]
+name = "test"
+version = "0.1.0"
+authors = ["dingari <danielgretars@bitbucket.org>"]
+
+[dependencies]
+rand = "0.3.14"
+time = "0.1.34"
