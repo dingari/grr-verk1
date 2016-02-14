@@ -1,52 +1,91 @@
-extern crate rand;
 extern crate time;
 
+mod array;
 mod sort;
 
-use rand::Rng;
+use std::env;
 use time::*;
 
 fn main() {
-	let size = 100000;
-	let mut a: [isize; 100000] = [0; 100000];
-	let len = a.len();
+	const SIZE: usize = 50000;
+	let mut print_pretty = true;
+	let mut a: [i32; SIZE] = [0; SIZE];
+	let mut b: [i32; SIZE] = [0; SIZE];
 
-	fill_random(&mut a, len);
-
-	println!("Start sorting");
-	let start = time::precise_time_ns();
-
-	sort::sort_and_switch(&mut a, 0, (len-1) as isize, size);
-
-	let duration = ((time::precise_time_ns() - start) as f64) / ((1000 * 60) as f64);
-
-	println!("Finished sorting in {} s", duration);
-
-	let is_sorted = check_sorted(&a);
-	println!("Is array sorted? {}", is_sorted);
-}
-
-fn check_sorted(a: &[isize]) -> bool {
-	let mut ret = true;
-	for i in 1..a.len() {
-		if a[i] < a[i-1] {
-			ret = false;
+	if env::args().nth(2).unwrap() == "ugly" {
+		print_pretty = false;
+	}
+	
+	let first_arg = env::args().nth(1).unwrap();
+	match first_arg.parse::<isize>().unwrap() {
+		1 => {
+			// Random distribution
+			array::fill_random(&mut a);
+			array::clone(& a, &mut b);
+			run_tests(&mut a, & b, 0, 5, 300, print_pretty);
+		},
+		2 => {
+			// Random equal distribution
+			array::fill_equal(&mut a);
+			array::clone(&a, &mut b);
+			run_tests(&mut a, &b, 0, 100, 5000, print_pretty);
+		},
+		3 => {
+			// Close-to-sorted distribution
+			array::fill_almost_sorted(&mut a);
+			array::clone(&a, &mut b);
+			run_tests(&mut a, &b, 0, 100, SIZE, print_pretty);
+		},
+		_ => {
+			panic!("Unknown argument: {}", first_arg);
 		}
 	}
-
-	ret		// Return this value
 }
 
-fn fill_random(a: &mut [isize], len: usize) {
-	let mut rng = rand::thread_rng();
+fn run_tests(a: &mut [i32], b: & [i32], start: usize, 
+	incr: usize, end: usize, print_pretty: bool) {
 
-	for i in 0..len {
-		a[i] = rng.gen::<isize>();
+	let len = a.len();
+	let mut k = start;
+
+	let start = time::precise_time_ns();
+	sort::quicksort(a, 0, (len-1) as i32);
+	let duration = (time::precise_time_ns() - start) as f64;
+	let dur_ms = duration / ((1000 * 1000) as f64);
+	if print_pretty {
+		println!("\nQuicksort baseline: {} ms\n", dur_ms);
+	}
+
+	array::clone(b, a);
+
+	// TODO: print to CSV file
+	if print_pretty {
+		println!("{0: <8} | {1: <15} | {2: <10}", 
+			"k", "t [ms]", "sorted");
+		println!("---------------------------------------");
+	} else {
+		println!("k,t");
+	}
+	
+	while k <= end {
+		let start = time::precise_time_ns();
+
+		sort::sort_and_switch(a, 0, (len-1) as i32, k);
+
+		let duration = (time::precise_time_ns() - start) as f64;
+		let dur_ms = duration / ((1000 * 1000) as f64);
+		let is_sorted = array::check_sorted(&a);
+		
+		// TODO: print to CSV file
+		if print_pretty {
+			println!("{0: <8} | {1: <15} | {2: <10}", 
+				k, dur_ms, is_sorted);
+		} else {
+			println!("{},{}", k, dur_ms);
+		}
+
+		k += incr;
+		array::clone(b, a);
 	}
 }
 
-// fn fill_sorted(a: &mut [isize], len: usize) {
-// 	for i in 0..len {
-// 		a[i] = rng.gen::<i8>();
-// 	}
-// }
