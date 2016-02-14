@@ -16,6 +16,7 @@ plot(k5, t5, 'go'); hold on;
 title('Randomly distributed array');
 xlabel('k');
 ylabel('time [ms]');
+print -dpng 'images/rand1.png'
 
 t_avg = (t1 + t2 + t3 + t4 + t5)/5;
 
@@ -24,6 +25,7 @@ plot(k1, t_avg);
 title('Randomly distributed array - Average');
 xlabel('k');
 ylabel('time [ms]');
+print -dpng 'images/rand2.png'
 
 %% 2 - Equal distribution -
 clear all;
@@ -42,6 +44,7 @@ plot(k5, t5, 'go'); hold on;
 title('Equally distributed array');
 xlabel('k');
 ylabel('time [ms]');
+print -dpng 'images/eq1.png'
 
 t_avg = (t1 + t2 + t3 + t4 + t5)/5;
 
@@ -50,6 +53,7 @@ plot(k1, t_avg);
 title('Equally distributed array - Average');
 xlabel('k');
 ylabel('time [ms]');
+print -dpng 'images/eq2.png'
 
 
 %% 3 - Almost sorted - 7.000 elements
@@ -69,6 +73,7 @@ plot(k5, t5, 'go'); hold on;
 title('Almost sorted array');
 xlabel('k');
 ylabel('time [ms]');
+print -dpng 'images/almost1.png'
 
 t_avg = (t1 + t2 + t3 + t4 + t5)/5;
 
@@ -77,3 +82,6 @@ plot(k1, t_avg);
 title('Almost sorted array - Average');
 xlabel('k');
 ylabel('time [ms]');
+print -dpng 'images/almost2.png'
+
+close all;
