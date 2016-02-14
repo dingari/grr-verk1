@@ -1,19 +1,15 @@
 extern crate rand;
 
 use self::rand::Rng;
-use super::sort;
 
 pub fn check_sorted(a: &[i32]) -> bool {
-	//let mut ret = true;
 	for i in 1..a.len() {
 		if a[i] < a[i-1] {
-			/*println!("Sort check failed, a[{}]={} > a[{}] = {}", 
-				i, a[i], i-1, a[i-1]);*/
 			return false;
 		}
 	}
 
-	return true		// Return this value
+	return true
 }
 
 pub fn fill_random(a: &mut [i32]) {
@@ -30,6 +26,8 @@ pub fn fill_sorted(a: &mut [i32]) {
 	let mut rng = rand::thread_rng();
 
 	while i < a.len() {
+		// 8-bit integer range: [-127:127]
+		// 50% chance of >0
 		if rng.gen::<i8>() > 0 {
 			a[i] = j;
 			i += 1;
@@ -39,8 +37,10 @@ pub fn fill_sorted(a: &mut [i32]) {
 	}
 }
 
+// Fill an array with equally distributed values
+// Generates sqrt(n) 32-bit int values and shuffles the array
 pub fn fill_equal(a: &mut [i32]) {
-	let total = ((a.len() as f64).sqrt() as usize);
+	let total = (a.len() as f64).sqrt() as usize;
 	let mut rng = rand::thread_rng();
 
 	for i in 0..total {
@@ -53,6 +53,7 @@ pub fn fill_equal(a: &mut [i32]) {
 	shuffle(a);
 }
 
+// Fill an array with almost sorted values
 pub fn fill_almost_sorted(a: &mut [i32]) {
 	fill_sorted(a);
 
@@ -68,6 +69,7 @@ pub fn fill_almost_sorted(a: &mut [i32]) {
 	}
 }
 
+// Clone the contents of array a to array b
 pub fn clone(a: &[i32], b: &mut [i32]) {
 	if a.len() != b.len() {
 		panic!("Array lengths must be equal");
@@ -94,6 +96,8 @@ pub fn println_slice(a: &[i32], i: usize, j: usize) {
 	println!("{}]", a[j-1]);
 }
 
+// Fisher-Yates shuffle
+// Shuffles the values of array a
 pub fn shuffle(a: &mut [i32]) {
 	let mut rng = rand::thread_rng();
 
