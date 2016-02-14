@@ -27,7 +27,7 @@ pub fn fill_sorted(a: &mut [i32]) {
 
 	while i < a.len() {
 		// 8-bit integer range: [-127:127]
-		// 50% chance of >0
+		// ~50% chance of >0
 		if rng.gen::<i8>() > 0 {
 			a[i] = j;
 			i += 1;

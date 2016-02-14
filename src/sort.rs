@@ -24,7 +24,7 @@ pub fn quicksort(a: &mut [i32], p: i32, r: i32) {
 
 pub fn sort_and_switch(a: &mut [i32], p: i32, r: i32, k: usize) {
 
-	if (k as i32) <= (r - p + 1) {
+	if (k as i32) < (r - p) {
 		if p < r {
 			let q = partition(a, p, r);
 			sort_and_switch(a, p, q-1, k);

@@ -8,7 +8,7 @@ use time::*;
 
 fn main() {
 	// Change this if you enter a stack-overflow during runtime
-	const SIZE: usize = 50000;
+	const SIZE: usize = 100000;
 	let mut print_pretty = true;
 	let mut a: [i32; SIZE] = [0; SIZE];
 	let mut b: [i32; SIZE] = [0; SIZE];
@@ -50,7 +50,7 @@ fn main() {
 // in the specified range
 // Params: 
 //	a: array to sort
-//	b: a copy of a
+//	b: a copy of array a
 //	start: starting value of k
 //	incr: increment for k
 //	end: ending value for k
